@@ -81,7 +81,7 @@ class BaseGetxController<T> extends GetxController {
 
 # Экран входа
 
-<div align="center"><img src="https://github.com/Kizat/ayan_dis_documentation/blob/master/screenshots/login.png?raw=true" height="500"/></div>
+<div align="center"><img src="https://github.com/Kizat/ayan_dis_documentation/blob/main/screenshots/login.png?raw=true" height="500"/></div>
 
 - Для входа в учетную запись требуется следующее API:
 
@@ -104,7 +104,7 @@ class BaseGetxController<T> extends GetxController {
 
 - Выбор сервера производится зажатием кнопки "Войти" на экране входа
 
-<div align="center"><img src="https://github.com/Kizat/ayan_dis_documentation/blob/master/screenshots/choose_server.png?raw=true" height="500"/></div>
+<div align="center"><img src="https://github.com/Kizat/ayan_dis_documentation/blob/main/screenshots/choose_server.png?raw=true" height="500"/></div>
 
 ### Выбор роли сотрудника
   - Выбор роли усуществляется со следующего API во время входа:
@@ -133,7 +133,7 @@ class BaseGetxController<T> extends GetxController {
 
 # Профиль
 
-<div align="center"><img src="https://github.com/Kizat/ayan_dis_documentation/blob/master/screenshots/profile.png?raw=true" height="500"/></div>
+<div align="center"><img src="https://github.com/Kizat/ayan_dis_documentation/blob/main/screenshots/profile.png?raw=true" height="500"/></div>
 
 
 - В профиле сотрудника присутствуют следующие информации:
@@ -193,10 +193,10 @@ class BaseGetxController<T> extends GetxController {
 
 
 <p float="left">
-  <img src="https://github.com/Kizat/ayan_dis_documentation/blob/master/screenshots/profile.png?raw=true" width="24%" alt="Запланированная смена"/>
-  <img src="https://github.com/Kizat/ayan_dis_documentation/blob/master/screenshots/открытая_смена.png?raw=true" width="24%" alt="Открытая смена"/> 
-  <img src="https://github.com/Kizat/ayan_dis_documentation/blob/master/screenshots/Перерыв.png?raw=true" width="24%"  alt="Перерыв"/>
-  <img src="https://github.com/Kizat/ayan_dis_documentation/blob/master/screenshots/Досрочно_закрытая_смена.png?raw=true" width="24%" alt="Досрочно закрытая смена"/>
+  <img src="https://github.com/Kizat/ayan_dis_documentation/blob/main/screenshots/choose_server.png?raw=true" width="24%" alt="Запланированная смена"/>
+  <img src="https://github.com/Kizat/ayan_dis_documentation/blob/main/screenshots/открытая_смена.png?raw=true" width="24%" alt="Открытая смена"/> 
+  <img src="https://github.com/Kizat/ayan_dis_documentation/blob/main/screenshots/Перерыв.png?raw=true" width="24%"  alt="Перерыв"/>
+  <img src="https://github.com/Kizat/ayan_dis_documentation/blob/main/screenshots/Досрочно_закрытая_смена.png?raw=true" width="24%" alt="Досрочно закрытая смена"/>
 </p>
 
 ### Кнопка открытия смены
