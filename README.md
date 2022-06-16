@@ -27,6 +27,16 @@
   - [Выполненные заказы комплектовщика](#выполненные-заказы-комплектовщика)
   - [Активные заказы курьера](#активные-заказы-курьера)
   - [Выполненные заказы курьера](#выполненные-заказы-курьера)
+  - [Карта](#карта)
+  - [Изменение статуса](#изменение-статуса)
+  - [Получение продуктов в заказе](#получение-продуктов-в-заказе)
+  - [Таймер при сборке у комплектовщиков](#таймер-при-сборке-у-комплектовщиков)
+  - [Сканирование штрихкода](#сканирование-штрихкода)
+  - [Количество совпадает с количеством заказанного продукта](#количество-совпадает-с-количеством-заказанного-продукта)
+  - [Если нет соответствующего продукта или количество меньше заказанного](#если-нет-соответствующего-продукта-или-количество-меньше-заказанного)
+  - [Добавление аналогых продуктов](#добавление-аналогых-продуктов)
+  - [Удаление аналогового продукта](#удаление-аналогового-продукта)
+  - [Если нет заказанного продукта и нет для продукта аналога](#если-нет-заказанного-продукта-и-нет-для-продукта-аналога)
 
 
 # State Management
@@ -148,6 +158,7 @@ class BaseGetxController<T> extends GetxController {
     - [Кнопка закрытия смены](#кнопка-закрытия-смены).
   - [Календарь выходов на смену за текущий месяц количество отработанных смен, количество отработанных часов, количество собранных заказов](#календарь-выходов-на-смену-за-текущий-месяц):
   - [Начисление за отработанные часы, премия за количество заказов, начисление за отдельный период](#начисление-за-отработанные-часы-премия-за-количество-заказов-начисление-за-отдельный-период);
+  - [Карта](#карта)
 
 
 ## Информация о сотруднике
@@ -370,3 +381,250 @@ class BaseGetxController<T> extends GetxController {
 ```
 
 
+## Карта
+
+- В карте у курьеров показываются [активные заказы](#активные-заказы-курьера) и повторяются методы
+
+## Изменение статуса 
+
+- За изменением статуса отвечает следующий API:
+
+```dart
+
+  @override
+  String get endPoint => "/api/employee/order/status/edit";
+
+  @override
+  Future<Status?> onSuccess({required body, Function(String error)? onDataError}) async => await compute(
+        statusFromJson,
+        body['data']['status'],
+      );
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.putMethod;
+
+  @override
+  Map<String, dynamic> get auth => {"TOKEN": "Bearer $token"};
+
+  @override
+  get body => {"statusId": statusId, "orderId": orderId};
+
+```
+
+
+## Получение продуктов в заказе
+
+- За получением продуктов в заказе отвечает следующий API:
+
+```dart
+
+  @override
+  String get endPoint =>"/api/employee/product/listProductFromOrder/$orderId";
+
+  @override
+  Future<List<Product>?> onSuccess({required body, Function(String error)? onDataError}) async =>
+      await compute(productsFromJson, body['data']);
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.getMethod;
+
+```
+
+
+## Таймер при сборке у комплектовщиков
+
+- Чтобы получить таймер на сборку заказа используется следующий API:
+
+```dart
+  @override
+  String get endPoint => "/api/admin/picker/get/timer";
+
+  @override
+  Map<String, dynamic>? get queryParameters => {
+        "orderId": orderId,
+      };
+
+  @override
+  Future<DateTime> onSuccess({required body, Function(String error)? onDataError}) async =>
+      DateTime.parse(body['data']["endAt"]);
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.getMethod;
+
+  @override
+  Map<String, dynamic> get auth => {"TOKEN": "Bearer $token"};
+
+```
+
+## Сканирование штрихкода
+
+- Чтобы отсканировать штриход продукта вызывается следующий API:
+
+```dart
+
+  @override
+  String get endPoint => "/api/employee/product/findBarcode";
+
+  @override
+  get body => {
+        'barcode': barcode,
+        "orderProductId": orderProductId,
+      };
+
+  @override
+  Future<ScannedBarcode?> onSuccess({required body, Function(String error)? onDataError}) async {
+    // print(this.body);
+    return await compute(barcodeFromJson, body['data']);
+  }
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.postMethod;
+
+  @override
+  Map<String, dynamic> get auth => {
+        "TOKEN": "Bearer $token",
+      };
+
+```
+
+## Количество совпадает с количеством заказанного продукта
+
+
+- Если вы подобрали правильно штрихкод и количество совпадает с количеством заказанного продукта:
+
+```dart
+
+
+  @override
+  String get endPoint => "/api/employee/product/confirmedQuantity";
+
+  @override
+  Future<bool?> onSuccess({required body, Function(String error)? onDataError}) async => true;
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.postMethod;
+
+  @override
+  Map<String, dynamic> get auth => {"TOKEN": "Bearer $token"};
+
+  @override
+  get body => {'count': amount, 'orderProductId': orderProductId};
+
+
+```
+
+## Если нет соответствующего продукта или количество меньше заказанного
+
+```dart
+
+  @override
+  String get endPoint => "/api/employee/product/absence";
+
+  @override
+  Future<bool?> onSuccess({required body, Function(String error)? onDataError}) async => true;
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.postMethod;
+
+  @override
+  Map<String, dynamic> get auth => {"TOKEN": "Bearer $token"};
+
+  @override
+  get body => {
+        'amountClient': amountClient,
+        'orderId': orderId,
+        'productPervId': productId,
+      };
+
+```
+
+– далее:
+
+```dart
+
+  @override
+  String get endPoint => "/api/employee/product/changeCount";
+
+  @override
+  Future<bool?> onSuccess({required body, Function(String error)? onDataError}) async => true;
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.postMethod;
+
+  @override
+  get body => {'count': count, 'orderProductId': orderProductId};
+
+  @override
+  Map<String, dynamic> get auth => {"TOKEN": "Bearer $token"};
+
+```
+
+## Добавление аналогых продуктов
+
+```dart
+
+
+  @override
+  String get endPoint => "/api/employee/product/changeProduct";
+
+  @override
+  Future<bool?> onSuccess({required body, Function(String error)? onDataError}) async => true;
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.postMethod;
+
+  @override
+  get body => {
+        'count': amount,
+        'departmentId': departmentId,
+        'orderProductId': orderProductId,
+        'productNextId': productNextId
+      };
+
+  @override
+  Map<String, dynamic> get auth => {"TOKEN": "Bearer $token"};
+
+```
+
+## Удаление аналогового продукта
+
+```dart
+
+  @override
+  String get endPoint => "/api/employee/product/deleteProduct";
+
+  @override
+  Future<bool?> onSuccess({required body, Function(String error)? onDataError}) async => true;
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.postMethod;
+
+  @override
+  get body => {
+        'analogProductId': analogProductId,
+        'oldProductId': productId,
+        'orderId': orderId
+      };
+
+  @override
+  Map<String, dynamic> get auth => {"TOKEN": "Bearer $token"};
+
+```
+
+## Если нет заказанного продукта и нет для продукта аналога
+
+```dart
+
+  @override
+  String get endPoint => "/api/employee/product/cancelStatusProduct";
+
+  @override
+  Future<bool?> onSuccess({required body, Function(String error)? onDataError}) async => true;
+
+  @override
+  QueryMethod get queryMethod => QueryMethod.postMethod;
+
+  @override
+  get body => {'orderId': orderId, 'productId': productId};
+
+```
